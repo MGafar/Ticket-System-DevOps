@@ -109,34 +109,10 @@ resource "aws_security_group" "ec2" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    from_port   = 9002
-    to_port     = 9002
-    protocol    = "tcp"
-    description = "HTTP"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     description = "Telnet"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    description = "HTTP"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    description = "HTTPS"
     cidr_blocks = ["0.0.0.0/0"]
   }
 

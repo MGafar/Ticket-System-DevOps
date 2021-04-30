@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticket-system-api
+  labels:
+    app: ticket-system-api
+spec:
+  selector:
+    matchLabels:
+      app: ticket-system-api
+  replicas: 3
+  template:
+    metadata:
+      name: ticket-system-api
+      labels:
+        app: ticket-system-api
+    spec:
+      containers:
+        - name: ticket-system-container
+          image: mgafar/springboot
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9002

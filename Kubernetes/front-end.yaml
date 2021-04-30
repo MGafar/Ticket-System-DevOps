@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-client
+spec:
+  selector:
+    matchLabels:
+      app: frontend-client
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: frontend-client
+    spec:
+      containers:
+        - name: frontend-client
+          image: mgafar/ticketsystem
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
