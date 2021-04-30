@@ -1,3 +1,3 @@
-variable rds_port {
-    default = 3306
+variable "rds_port" {
+  default = 3306
 }

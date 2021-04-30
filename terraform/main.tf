@@ -1,9 +1,3 @@
-provider "aws" {
-  access_key = "AKIAXP7KAOGL4K5TWGPN"
-  secret_key = "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"
-  region     = "eu-west-2"
-}
-
 module "vpc" {
   source = "./VPC"
 
@@ -43,41 +37,44 @@ module "ec2" {
 }
 
 module "PublicSubnet" {
-    source = "./Subnet"
-    vpc_id = module.vpc.vpc_id
-    cidr_block = "11.0.1.0/24"
-    availability_zone = "eu-west-2a"
-    map_public_ip_on_launch = true
+  source                  = "./Subnet"
+  vpc_id                  = module.vpc.vpc_id
+  cidr_block              = "11.0.1.0/24"
+  availability_zone       = "eu-west-2a"
+  map_public_ip_on_launch = true
 }
 
 module "RDSSubnet1" {
-    source = "./Subnet"
-    vpc_id = module.vpc.vpc_id
-    cidr_block = "11.0.2.0/24"
-    availability_zone = "eu-west-2b"
+  source            = "./Subnet"
+  vpc_id            = module.vpc.vpc_id
+  cidr_block        = "11.0.2.0/24"
+  availability_zone = "eu-west-2b"
+  map_public_ip_on_launch = true
 }
 
 module "RDSSubnet2" {
-    source = "./Subnet"
-    vpc_id = module.vpc.vpc_id
-    cidr_block = "11.0.3.0/24"
-    availability_zone = "eu-west-2c"
+  source            = "./Subnet"
+  vpc_id            = module.vpc.vpc_id
+  cidr_block        = "11.0.3.0/24"
+  availability_zone = "eu-west-2c"
+  map_public_ip_on_launch = true
 }
 
-# resource "aws_db_instance" "RDSInstance" {
-#   allocated_storage    = 20
-#   db_subnet_group_name = aws_db_subnet_group.rds_subnet_group.name
-#   delete_automated_backups = true
-#   engine               = "mysql"
-#   engine_version       = "8.0.23"
-#   instance_class       = "db.t2.micro"
-#   identifier           = "tf-rds-identifier"
-#   username             = "root"
-#   password             = "password"
-#   parameter_group_name = "default.mysql8.0"
-#   vpc_security_group_ids = [aws_security_group.rds.id]
-#   skip_final_snapshot  = true
-# }
+resource "aws_db_instance" "RDSInstance" {
+  allocated_storage        = 20
+  db_subnet_group_name     = aws_db_subnet_group.rds_subnet_group.name
+  delete_automated_backups = true
+  engine                   = "mysql"
+  engine_version           = "8.0.23"
+  instance_class           = "db.t2.micro"
+  identifier               = "tf-rds-identifier"
+  username                 = "root"
+  password                 = "password"
+  parameter_group_name     = "default.mysql8.0"
+  vpc_security_group_ids   = [aws_security_group.rds.id]
+  skip_final_snapshot      = true
+  publicly_accessible      = true
+}
 
 resource "aws_security_group" "rds" {
   name = "terraform-rds-sg"
@@ -86,8 +83,16 @@ resource "aws_security_group" "rds" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    from_port   = 3006
-    to_port     = 3006
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    description = "MySQL"
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
     protocol    = "tcp"
     description = "MySQL"
     cidr_blocks = ["0.0.0.0/0"]
@@ -116,7 +121,6 @@ resource "aws_security_group" "ec2" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Allow all outbound traffic.
   egress {
     from_port   = 0
     to_port     = 0
