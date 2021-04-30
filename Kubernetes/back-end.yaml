@@ -21,3 +21,10 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 9002
+          env:
+            - name: RDS_URL
+              value: rdsurlplaceholder
+            - name: RDS_USERNAME
+              value: rdsusernameplaceholder
+            - name: RDS_PASSWORD
+              value: rdspasswordplaceholder
