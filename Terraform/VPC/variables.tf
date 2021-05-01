@@ -11,20 +11,19 @@ variable "enable_dns_hostnames" {
 }
 
 variable "vpc_name_tag" {
-    default = "tf-virtual-private-cloud"
+    default = "Ticket System VPC"
 }
 
 variable "igw_name_tag" {
-    default = "tf-internet-gateway"
+    default = "Ticket System IGW"
 }
-
 
 variable "route" {
     default = []
 }
 
 variable "rt_name_tag" {
-    default = "tf-route-table"
+    default = "Ticket System RT"
 }
 
 variable "subnet_ids" {

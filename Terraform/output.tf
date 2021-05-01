@@ -15,13 +15,13 @@ output "Jenkins_ec2_public_ip" {
 }
 
 output "rds_endpoint" {
-  value = aws_db_instance.RDSInstance.endpoint
+  value = module.RDS.endpoint
 }
 
 output "rds_user" {
-  value = aws_db_instance.RDSInstance.username
+  value = module.RDS.username
 }
 
 output "rds_password" {
-  value = aws_db_instance.RDSInstance.password
+  value = module.RDS.password
 }
